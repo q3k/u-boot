@@ -5,8 +5,16 @@ DECLARE_GLOBAL_DATA_PTR;
 
 int dram_init(void)
 {
-    // Just guessing for now.
-    gd->ram_size = (32 << 10);
+    if (fdtdec_setup_mem_size_base() != 0)
+        return -EINVAL;
+
+    return 0;
+}
+
+int dram_init_banksize(void)
+{
+    fdtdec_setup_memory_banksize();
+
     return 0;
 }
 

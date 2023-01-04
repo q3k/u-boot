@@ -14,9 +14,9 @@
 	model = "Apple iPod Nano 5G";
 	compatible = "samsung,s5l87xx";
 
-	memory@08000000 {
+	memory {
         device_type = "memory";
-        reg = <0x08000000 0x01000000>;
+        reg = <0x08000000 0x04000000>;
     };
 
 
@@ -59,4 +59,15 @@
 		clock-names = "uart", "clk_uart_baud0";
 		u-boot,dm-pre-reloc;
 	};
+
+	usbotg_hs: usb@38400000 {
+		compatible = "snps,dwc2";
+		reg = <0x38400000 0x40000>;
+		/*interrupts = <77>;*/
+		clocks = <&clkref>;
+		clock-names = "otg";
+		status = "okay";
+		dr_mode = "peripheral";
+	};
+
 };

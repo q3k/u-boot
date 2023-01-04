@@ -38,6 +38,7 @@ static int do_fastboot_usb(int argc, char *const argv[],
 			   uintptr_t buf_addr, size_t buf_size)
 {
 #if CONFIG_IS_ENABLED(USB_FUNCTION_FASTBOOT)
+	printf("alamo: %s:%d\n", __func__, __LINE__);
 	int controller_index;
 	char *usb_controller;
 	char *endp;
@@ -47,42 +48,56 @@ static int do_fastboot_usb(int argc, char *const argv[],
 		return CMD_RET_USAGE;
 
 	usb_controller = argv[1];
+	printf("alamo: %s:%d\n", __func__, __LINE__);
 	controller_index = simple_strtoul(usb_controller, &endp, 0);
+	printf("alamo: %s:%d\n", __func__, __LINE__);
 	if (*endp != '\0') {
 		pr_err("Error: Wrong USB controller index format\n");
 		return CMD_RET_FAILURE;
 	}
+	printf("alamo: %s:%d\n", __func__, __LINE__);
 
 	ret = usb_gadget_initialize(controller_index);
+	printf("alamo: %s:%d\n", __func__, __LINE__);
 	if (ret) {
 		pr_err("USB init failed: %d\n", ret);
 		return CMD_RET_FAILURE;
 	}
 
+	printf("alamo: %s:%d\n", __func__, __LINE__);
 	g_dnl_clear_detach();
+	printf("alamo: %s:%d\n", __func__, __LINE__);
 	ret = g_dnl_register("usb_dnl_fastboot");
 	if (ret)
 		return ret;
 
+	printf("alamo: %s:%d\n", __func__, __LINE__);
 	if (!g_dnl_board_usb_cable_connected()) {
 		puts("\rUSB cable not detected.\n" \
 		     "Command exit.\n");
 		ret = CMD_RET_FAILURE;
 		goto exit;
 	}
+	printf("alamo: %s:%d\n", __func__, __LINE__);
 
 	while (1) {
+	printf("alamo: %s:%d\n", __func__, __LINE__);
 		if (g_dnl_detach())
 			break;
+	printf("alamo: %s:%d\n", __func__, __LINE__);
 		if (ctrlc())
 			break;
+	printf("alamo: %s:%d\n", __func__, __LINE__);
 		schedule();
+	printf("alamo: %s:%d\n", __func__, __LINE__);
 		usb_gadget_handle_interrupts(controller_index);
 	}
 
+	printf("alamo: %s:%d\n", __func__, __LINE__);
 	ret = CMD_RET_SUCCESS;
 
 exit:
+	printf("alamo: %s:%d\n", __func__, __LINE__);
 	usb_gadget_release(controller_index);
 	g_dnl_unregister();
 	g_dnl_clear_detach();
