@@ -1,0 +1,62 @@
+// SPDX-License-Identifier: GPL-2.0+
+/*
+ * Samsung's Exynos4 SoC common device tree source
+ *
+ * Copyright (c) 2014 Samsung Electronics Co., Ltd.
+ *		http://www.samsung.com
+ */
+
+ /dts-v1/;
+
+#include "skeleton.dtsi"
+
+/ {
+	model = "Apple iPod Nano 5G";
+	compatible = "samsung,s5l87xx";
+
+	memory@08000000 {
+        device_type = "memory";
+        reg = <0x08000000 0x01000000>;
+    };
+
+
+	aliases {
+		serial0 = "/serial@3cc00000";
+		console = "/serial@3cc00000";
+	};
+	//combiner: interrupt-controller@10440000 {
+	//	compatible = "samsung,exynos4210-combiner";
+	//	#interrupt-cells = <2>;
+	//	interrupt-controller;
+	//	reg = <0x10440000 0x1000>;
+	//};
+
+	//gic: interrupt-controller@10490000 {
+	//	compatible = "arm,cortex-a9-gic";
+	//	#interrupt-cells = <3>;
+	//	interrupt-controller;
+	//	cpu-offset = <0x4000>;
+	//	reg = <0x10490000 0x10000>, <0x10480000 0x10000>;
+	//};
+
+	chosen {
+        stdout-path = "serial0:115200n8";
+    };
+
+    clkref: clock-ref {
+        compatible = "fixed-clock";
+        #clock-cells = <0>;
+        clock-frequency = <140000000>;
+        clock-output-names = "clkref";
+		u-boot,dm-pre-reloc;
+    };
+
+	serial@3cc00000 {
+		compatible = "apple,s5l-uart";
+		reg = <0x3cc00000 0x3c>;
+		id = <0>;
+		clocks = <&clkref>, <&clkref>;
+		clock-names = "uart", "clk_uart_baud0";
+		u-boot,dm-pre-reloc;
+	};
+};
